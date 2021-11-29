@@ -1,3 +1,1 @@
-const TheEyeBoilerplate = require('./lib/boilerplate')
-const theEye = new TheEyeBoilerplate('op_reader', './')
-theEye.run()
+require('../lib/boilerplate').run('../src/op_reader')
