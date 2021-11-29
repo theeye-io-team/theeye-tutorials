@@ -46,12 +46,18 @@ process.on('uncaughtException', err => {
 })
 
 class TheEyeBoilerplate {
-  constructor (handler) {
-    if (typeof handler !== 'function') {
-      throw new Error('handler function expected')
+  constructor (handler, path) {
+    //if (typeof handler !== 'function') {
+    //  throw new Error('handler function expected')
+    //}
+    //this.handler = handler
+    const handlerName = `${path}/${handler}`
+    try {
+      const handler = require(handlerName)
+      this.handler = handler
+    } catch (err) {
+      throw new Error(`Handler ${handlerName} not found`)
     }
-
-    this.handler = handler
   }
 
   async run () {
