@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/theeye-io-team/theeye-tutorials/issues"
   },
-  "homepage": "https://github.com/theeye-io-team/theeye-tutorials#readme"
+  "homepage": "https://github.com/theeye-io-team/theeye-tutorials#readme",
+  "dependencies": {
+    "dotenv": "~10.0.0"
+  }
 }

@@ -1,1 +1,1 @@
-require('../lib/boilerplate').run('../src/op_reader')
+require('./boilerplate_version_2')
