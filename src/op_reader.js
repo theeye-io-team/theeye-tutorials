@@ -39,7 +39,7 @@ const main = module.exports = async (args) => {
     }
   }
 
-  return matches
+  return { total: matches }
 }
 
 if (require.main === module) {
