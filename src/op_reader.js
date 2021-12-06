@@ -33,7 +33,7 @@ const main = module.exports = async (args) => {
     if (pattern.test(line)) {
       console.log(`Line for ${category}: ${line}`);
 
-      const extract = new RegExp(' ([0-9]{1}[0-9\.,]*)$')
+      const extract = new RegExp(' ([0-9]{1}[0-9\.,]*)-?$')
       const groups = line.match(extract)
       matches.push( groups[1] )
     }
