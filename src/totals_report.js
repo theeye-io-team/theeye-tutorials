@@ -8,28 +8,29 @@
  *
  */
 const main = module.exports = async (args) => {
-  let values
+  let payload
   try {
-    values = JSON.parse(args[0])
+    payload = JSON.parse(args[0])
   } catch (err) {
-    throw new Error('values - invalid JSON format')
+    throw new Error('payload - invalid JSON format')
   }
 
   const topic = args[1]
 
-  if (!Array.isArray(values)) {
-    throw new Error('values - invalid argument')
+  const totals = payload?.total
+  if (!Array.isArray(totals)) {
+    throw new Error('payload - invalid argument. total is not defined')
   }
 
-  if (values.length === 0) {
+  if (totals.length === 0) {
     return 'No se encontro el concepto'
   }
 
   let lines = ['Reporte de totales']
   lines.push(`---------------------------`)
   let sum = 0
-  for (let index = 0; index < values.length; index++) {
-    const value = values[index]
+  for (let index = 0; index < totals.length; index++) {
+    const value = totals[index]
     const num = strToNumCalc(value)
     sum += num
     lines.push(value)
