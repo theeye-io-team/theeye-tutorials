@@ -59,7 +59,7 @@ const main = async (filename, category) => {
 }
 
 async function processLineByLine(filename) {
-  const fileStream = fs.createReadStream(filename)
+  const fileStream = fs.createReadStream(filename);
 
   const rl = readline.createInterface({
     input: fileStream,
@@ -73,7 +73,6 @@ async function processLineByLine(filename) {
     console.log(`Line from file: ${line}`);
   }
 }
-
 
 // invoke main and capture result output
 main(process.argv[2], process.argv[3]).then(successOutput).catch(failureOutput)
