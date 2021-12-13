@@ -40,7 +40,7 @@ const main = module.exports = async (args) => {
     lines.push('-------------------------')
     lines.push(`Total ${topic}: ${sum.toLocaleString('es-AR')}`)
 
-    report[ topic ] = lines.join("\n")
+    report[ topic ] = lines.join("<br>\n") // text + html new line
   }
 
   return report
