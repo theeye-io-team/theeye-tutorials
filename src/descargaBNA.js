@@ -76,8 +76,7 @@ const dataOutput = (fecha) => {
 
 const preparePage = async (webUrl) => {
   browser = await puppeteer.launch({
-    headless: false,
-    // headless: true,
+    headless: process.env?.HEADLESS || false ,
     args: [
       '--no-sandbox',
       '--disable-features=site-per-process',
