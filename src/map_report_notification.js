@@ -3,9 +3,17 @@
  * @return {Array}
  */
 const main = module.exports = async (args) => {
-  const body = args[0]
+  const reports = JSON.parse(args[0])
 
-  return [body, "", ""]
+
+  let subject = 'Reporte totales'
+  let message = ''
+  for (let topic in reports) {
+    subject += ` ${topic}`
+    message += reports[topic]
+  }
+
+  return [subject, message, null]
 }
 
 if (require.main === module) {

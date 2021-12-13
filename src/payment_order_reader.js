@@ -39,7 +39,9 @@ const main = module.exports = async (args) => {
     }
   }
 
-  return { total: matches }
+  const totals = {}
+  totals[category] = matches
+  return totals
 }
 
 if (require.main === module) {
