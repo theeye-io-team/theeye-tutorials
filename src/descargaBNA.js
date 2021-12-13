@@ -1,13 +1,11 @@
 
-// require('config/config')
-const config = { webbot: { URL_BNA: 'https://www.bna.com.ar/Personas' } }
 const moment = require('moment')
 const puppeteer = require('puppeteer')
 const fs = require('fs')
 const retry = require('async-retry')
 const path = require('path')
-// const { url } = require('inspector')
-const URL_BNA = config.webbot.URL_BNA
+
+const URL_BNA = (process.env.URL_BNA || 'https://www.bna.com.ar/Personas')
 const HtmlTableToJson = require('html-table-to-json')
 
 const dataOutput = (fecha) => {
@@ -74,9 +72,8 @@ const dataOutput = (fecha) => {
   })
 }
 
-
 const preparePage = async (webUrl) => {
-  const headless = (process.env.HEADLESS === "false" ? false : true)
+  const headless = (process.env.HEADLESS !== 'false')
 
   browser = await puppeteer.launch({
     headless,
