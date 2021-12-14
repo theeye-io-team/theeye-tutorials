@@ -1,7 +1,7 @@
 [
-  { "label":"BRUTO", "value":"BRUTO" },
-  { "label":"FEE", "value":"FEE" },
-  { "label":"IBPMF", "value":"IBPMF" },
-  { "label":"IBPMZ", "value":"IBPMZ" },
-  { "label":"IVA", "value":"IVA" }
+  { "id": 1, "label":"BRUTO", "value":"BRUTO", "text": "Concepto BRUTO" },
+  { "id": 2, "label":"FEE", "value":"FEE", "text": "Concepto FEE"  },
+  { "id": 3, "label":"IBPMF", "value":"IBPMF", "text": "Concepto IBPMF"  },
+  { "id": 4, "label":"IBPMZ", "value":"IBPMZ", "text": "Concepto IBPMZ"  },
+  { "id": 5, "label":"IVA", "value":"IVA", "text": "Concepto IVA"  }
 ]
