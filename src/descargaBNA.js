@@ -8,71 +8,36 @@ const path = require('path')
 const URL_BNA = (process.env.URL_BNA || 'https://www.bna.com.ar/Personas')
 const HtmlTableToJson = require('html-table-to-json')
 
-const dataOutput = (fecha) => {
-  return new Promise(async function (resolve, reject) {
-    try {
-      const fechaHistorico = moment(fecha).format('DD/MM/YYYY')
-      console.log(fechaHistorico)
+const main = module.exports = async (args) => {
 
-      await page.waitForSelector('div.tabSmall')
+  const fechaParaHistorico = args[0]
 
-      const tableBilletes = await page.evaluate(() => {
-        const rowsBilletes = document.querySelector('#billetes > table')
-        return rowsBilletes.outerHTML
-      })
+  moment.locale('es')
 
-      const billetes = HtmlTableToJson.parse(tableBilletes)
-
-      const tableDivisas = await page.evaluate(() => {
-        const rowsDivisas = document.querySelector('#divisas > table')
-        return rowsDivisas.outerHTML
-      })
-
-      const divisas = HtmlTableToJson.parse(tableDivisas)
-
-      await page.click('#buttonHistoricoBilletes')
-      await page.waitForSelector('#fecha')
-      await page.$eval('#fecha', (element, fecha) => {
-        element.value = fecha
-      }, fechaHistorico)
-
-      await page.evaluate(function () {
-        $('#buscarHistorico').click()
-      })
-      // await page.waitForTimeout(5000)
-
-      const tableDolar = await page.evaluate(() => {
-        const rowsDolar = document.querySelector('#tablaDolar > table')
-        return rowsDolar.outerHTML
-      })
-      const tableEuro = await page.evaluate(() => {
-        const rowsEuro = document.querySelector('#tablaEuro > table')
-        return rowsEuro.outerHTML
-      })
-
-      const dolar = HtmlTableToJson.parse(tableDolar)
-      const euro = HtmlTableToJson.parse(tableEuro)
-
-      const cotizaciones = {
-        billetes: billetes.results[0],
-        divisas: divisas.results[0],
-        historico: {
-          dolar: dolar.results[0],
-          euro: euro.results[0]
-        }
-      }
-
-      browser.close()
-      resolve(cotizaciones)
-    } catch (err) {
+  await retry(preparePage, {
+    retries: 5,
+    onRetry: async err => {
       console.log(err)
-      browser.close()
-      reject(err)
+      console.log('Retrying...')
+      await page.close()
+      await browser.close()
     }
   })
+
+  const resultados = await obtenerCotizaciones(fechaParaHistorico)
+    .catch(err => {
+      browser.close()
+      throw err
+    })
+
+  browser.close()
+
+  return { data: resultados }
 }
 
-const preparePage = async (webUrl) => {
+const preparePage = async (bail) => {
+
+  const webUrl = URL_BNA
   const headless = (process.env.HEADLESS !== 'false')
 
   browser = await puppeteer.launch({
@@ -100,31 +65,63 @@ const preparePage = async (webUrl) => {
   })
 }
 
-const main = module.exports = async (args) => {
-  const fechaParaHistorico = args[0]
+const obtenerCotizaciones = async (fecha) => {
+  const fechaHistorico = moment(fecha).format('DD/MM/YYYY')
+  console.log(fechaHistorico)
 
-  moment.locale('es')
+  await page.waitForSelector('div.tabSmall')
 
-  await retry(async bail => {
-    // console.log(URL_BNA)
-    await preparePage(URL_BNA)
-  }, {
-    retries: 5,
-    onRetry: async err => {
-      console.log(err)
-      console.log('Retrying...')
-      await page.close()
-      await browser.close()
+  const tableBilletes = await page.evaluate(() => {
+    const rowsBilletes = document.querySelector('#billetes > table')
+    return rowsBilletes.outerHTML
+  })
+
+  const billetes = HtmlTableToJson.parse(tableBilletes)
+
+  const tableDivisas = await page.evaluate(() => {
+    const rowsDivisas = document.querySelector('#divisas > table')
+    return rowsDivisas.outerHTML
+  })
+
+  const divisas = HtmlTableToJson.parse(tableDivisas)
+
+  await page.click('#buttonHistoricoBilletes')
+  await page.waitForSelector('#fecha')
+  await page.$eval('#fecha', (element, fecha) => {
+    element.value = fecha
+  }, fechaHistorico)
+
+  await page.evaluate(function () {
+    $('#buscarHistorico').click()
+  })
+  // await page.waitForTimeout(5000)
+
+  const tableDolar = await page.evaluate(() => {
+    const rowsDolar = document.querySelector('#tablaDolar > table')
+    return rowsDolar.outerHTML
+  })
+  const tableEuro = await page.evaluate(() => {
+    const rowsEuro = document.querySelector('#tablaEuro > table')
+    return rowsEuro.outerHTML
+  })
+
+  const dolar = HtmlTableToJson.parse(tableDolar)
+  const euro = HtmlTableToJson.parse(tableEuro)
+
+  const cotizaciones = {
+    billetes: billetes.results[0],
+    divisas: divisas.results[0],
+    historico: {
+      dolar: dolar.results[0],
+      euro: euro.results[0]
     }
-  })
+  }
 
-  // const resultados = await processDataRequest(fechaParaHistorico)
-  // const resultados = await dataOutput(fechaParaHistorico)
-  return resultados = await dataOutput(fechaParaHistorico).then(results => { return results }).catch(error => {
-    throw new Error(error)
-  })
+  return cotizaciones
 }
 
 if (require.main === module) {
-  main(process.argv.slice(2)).then(console.log).catch(console.error)
+  main(process.argv.slice(2))
+    .then(console.log)
+    .catch(console.error)
 }

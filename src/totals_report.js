@@ -43,7 +43,7 @@ const main = module.exports = async (args) => {
     report[ topic ] = lines.join("<br>\n") // text + html new line
   }
 
-  return report
+  return { data: report }
 }
 
 /**

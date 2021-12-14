@@ -3,16 +3,16 @@ const readline = require('readline')
 
 /**
  *
- * Dado un filename , busca todas las lineas que incluyan la category indicada.
+ * Dado un filename , busca todas las lineas que incluyan la concepto indicada.
  *
  * @param {String} filename
- * @param {String} category
+ * @param {String} concepto
  * @return {Array}
  *
  */
 const main = module.exports = async (args) => {
 
-  const [ filename, category ] = args
+  const [ filename, concepto ] = args
 
   const fileStream = fs.createReadStream(filename)
 
@@ -29,9 +29,9 @@ const main = module.exports = async (args) => {
     // Each line in input.txt will be successively available here as `line`.
 
     // CODE FOR SECTION 3B.
-    const pattern = new RegExp(category)
+    const pattern = new RegExp(concepto)
     if (pattern.test(line)) {
-      console.log(`Line for ${category}: ${line}`);
+      console.log(`Line for ${concepto}: ${line}`);
 
       const extract = new RegExp(' ([0-9]{1}[0-9\.,]*)-?$')
       const groups = line.match(extract)
@@ -40,8 +40,8 @@ const main = module.exports = async (args) => {
   }
 
   const totals = {}
-  totals[category] = matches
-  return totals
+  totals[concepto] = matches
+  return { data: totals }
 }
 
 if (require.main === module) {
