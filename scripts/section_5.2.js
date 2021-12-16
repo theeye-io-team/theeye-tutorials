@@ -13,7 +13,7 @@ const main = module.exports = async (args) => {
     message += reports[topic]
   }
 
-  return [subject, message, '']
+  return { data: [subject, message, ''] }
 }
 
 if (require.main === module) {
