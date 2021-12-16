@@ -11,6 +11,7 @@ const readline = require('readline')
  *
  */
 const main = module.exports = async (args) => {
+  args || (args = process.argv.slice(2))
 
   const [ filename, concepto ] = args
 
@@ -44,3 +45,6 @@ const main = module.exports = async (args) => {
   return { data: totals }
 }
 
+if (require.main === module) {
+  main(process.argv.slice(2)).then(console.log).catch(console.error)
+}
