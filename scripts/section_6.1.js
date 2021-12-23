@@ -10,8 +10,8 @@ const readline = require('readline')
  * @return {Array}
  *
  */
-const main = module.exports = async (args) => {
-  args || (args = process.argv.slice(2))
+const main = module.exports = async () => {
+  const args = process.argv.slice(2)
 
   const filename = args[0]
   const conceptos = JSON.parse(args[1])
@@ -49,5 +49,5 @@ const main = module.exports = async (args) => {
 }
 
 if (require.main === module) {
-  main(process.argv.slice(2)).then(console.log).catch(console.error)
+  main().then(console.log).catch(console.error)
 }
