@@ -11,7 +11,7 @@ const main = module.exports = async () => {
 
   const zip = new AdmZip(filename)
   const targetName = `${process.env.EXTRACTION_PATH}/`
-  zip.extractAllTo(, true)
+  zip.extractAllTo(targetName, true)
 
   const files = fs.readdirSync(process.env.EXTRACTION_PATH)
   return { data: files }
