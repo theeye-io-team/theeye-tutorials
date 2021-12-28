@@ -31,8 +31,8 @@ $parent = _WinAPI_GetProcessName($parent)
 
 
 IF $parent = "AutoIt3Wrapper.exe" or $parent = "SciTE.exe" Then
-  	#Include "env.au3"
-	ConsoleWrite(@crlf &  "Running from Autoit Editor")
+  	ConsoleWrite(@crlf &  "Running from Autoit Editor")
+	#include "env.au3"
 Else    
 	ConsoleWrite(@crlf &  "Running from TheEye, Console or VSCODE")
 EndIf
