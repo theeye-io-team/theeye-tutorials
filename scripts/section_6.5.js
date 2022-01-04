@@ -10,7 +10,7 @@ const API_URL = JSON.parse(process.env.THEEYE_API_URL)
 const ORG_NAME = JSON.parse(process.env.THEEYE_ORGANIZATION_NAME)
 
 // distpacher
-const main = module.exports = async () => {
+async function main () {
   const args = process.argv.slice(2)
   const filenames = JSON.parse(args[0])
 
@@ -31,6 +31,8 @@ const main = module.exports = async () => {
 
   return {}
 }
+
+module.exports = main
 
 const launchWorkflow = (task_arguments) => {
   return new Promise((resolve, reject) => {
