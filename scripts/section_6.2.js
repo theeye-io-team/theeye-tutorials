@@ -12,8 +12,7 @@ const main = module.exports = async () => {
   zip.extractAllTo(targetName, true)
 
   const files = fs.readdirSync(targetName)
-  console.log(files)
-  return { data: [ targetName ] }
+  return { data: [ files.map(filename => `${targetName}/${filename}`) ] }
 }
 
 if (require.main === module) {
