@@ -3,13 +3,13 @@ const moment = require('moment')
 const puppeteer = require('puppeteer')
 const fs = require('fs')
 const retry = require('async-retry')
-const path = require('path')
 
 const URL_BNA = (process.env.URL_BNA || 'https://www.bna.com.ar/Personas')
 const HtmlTableToJson = require('html-table-to-json')
 
-const main = module.exports = async (args) => {
+const main = module.exports = async () => {
 
+  const args = process.argv.slice(2)
   const fechaParaHistorico = args[0]
 
   moment.locale('es')
@@ -121,7 +121,7 @@ const obtenerCotizaciones = async (fecha) => {
 }
 
 if (require.main === module) {
-  main(process.argv.slice(2))
+  main()
     .then(console.log)
     .catch(console.error)
 }

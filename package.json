@@ -23,7 +23,6 @@
     "dotenv": "~10.0.0",
     "html-table-to-json": "^1.0.0",
     "moment": "^2.29.1",
-    "path": "^0.12.7",
     "puppeteer": "^13.0.0"
   }
 }
