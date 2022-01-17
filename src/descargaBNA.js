@@ -122,6 +122,6 @@ const obtenerCotizaciones = async (fecha) => {
 
 if (require.main === module) {
   main()
-    .then(console.log)
+    .then(output => console.log(JSON.stringify(output)))
     .catch(console.error)
 }

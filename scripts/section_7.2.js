@@ -10,29 +10,28 @@ const API_URL = JSON.parse(process.env.THEEYE_API_URL)
 const ORG_NAME = JSON.parse(process.env.THEEYE_ORGANIZATION_NAME)
 
 // distpacher
-async function main () {
+const main = module.exports = async () => {
   const args = process.argv.slice(2)
-  const filenames = JSON.parse(args[0])
+  const lote = args[0]
+  const filenames = JSON.parse(args[1])
 
   const promises = []
   for (let index = 0; index < filenames.length; index++) {
     const filename = filenames[index]
-
+    
     const content = fs.readFileSync(filename)
     const mime = 'text/plain'
     const data = `data:${mime};base64,${content.toString('base64')}`
 
     console.log(`running workflow for file ${filename}`)
 
-    const task_arguments = [ data, 'BRUTO' ]
+    const task_arguments = [ lote, data, ['BRUTO','FEE'] ]
     const response = await launchWorkflow(task_arguments)
     console.log(response.body)
   }
 
   return {}
 }
-
-module.exports = main
 
 const launchWorkflow = (task_arguments) => {
   return new Promise((resolve, reject) => {
@@ -47,7 +46,7 @@ const launchWorkflow = (task_arguments) => {
       hostname: url.hostname,
       path: `${url.pathname}${url.search}`
     }
-
+    
     const req = https.request(reqOpts, res => {
       let str = ''
       res.on('data', d => {
@@ -55,7 +54,7 @@ const launchWorkflow = (task_arguments) => {
       })
       res.on('end', () => {
         res.body = str
-
+        
         if (res.statusCode >= 500) {
           const error = new Error('Internal Server Error')
           error.res = res
