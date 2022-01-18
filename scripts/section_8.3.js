@@ -1,5 +1,6 @@
 const got = require('got')
 const https = require('https')
+const http = require('http')
 const { URL } = require('url')
 
 const API_URL = JSON.parse(process.env.THEEYE_API_URL)
@@ -57,7 +58,9 @@ const launchWorkflow = (task_arguments) => {
       path: `${url.pathname}${url.search}`
     }
     
-    const req = https.request(reqOpts, res => {
+    const request = (url.protocol==='https:'?https:http).request
+    
+    const req = request(reqOpts, res => {
       let str = ''
       res.on('data', d => {
         if (d) { str += d; }

@@ -1,5 +1,6 @@
 const fs = require('fs')
 const https = require('https')
+const http = require('http')
 const { URL } = require('url')
 
 const WF_ID = process.env.CASO1_WF_ID
@@ -44,8 +45,10 @@ const launchWorkflow = (task_arguments) => {
       hostname: url.hostname,
       path: `${url.pathname}${url.search}`
     }
+
+    const request = (url.protocol==='https:'?https:http).request
     
-    const req = https.request(reqOpts, res => {
+    const req = request(reqOpts, res => {
       let str = ''
       res.on('data', d => {
         if (d) { str += d; }
