@@ -15,7 +15,7 @@ const main = module.exports = async () => {
   const zip = new AdmZip(filename)
   const targetName = `${process.env.EXTRACTION_PATH}/${JOB_ID}`
   zip.extractAllTo(targetName, true)
-
+  
   const files = fs.readdirSync(targetName)
 
   await updateIndicator(JOB_ID, files.length)
@@ -33,17 +33,13 @@ async function updateIndicator (title, count) {
     json: { value: count, title: title, type: 'counter' },
     responseType: 'json'
   }).catch(err => err)
-
+  
   if (response instanceof Error) {
     const err = new Error(response.message)
     err.data = response.response.body
     err.code = response.response.statusCode
     throw err
   } else {
-    return response.body.data
+    return response.body.data    
   }
-}
-
-if (require.main === module) {
-  main().then(console.log).catch(console.error)
 }

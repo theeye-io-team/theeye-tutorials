@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 const fs = require('fs')
 const https = require('https')
 const { URL } = require('url')
@@ -80,6 +78,3 @@ const launchWorkflow = (task_arguments) => {
     req.end()
   })
 }
-
-// invoke main and capture result output
-main().then(console.log).catch(console.error)
