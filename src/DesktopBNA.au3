@@ -94,8 +94,20 @@ Json_Put($cotizaciones, ".billetes", $billetes)
 Json_Put($cotizaciones, ".divisas", $divisas)
 ;ConsoleWrite(Json_encode($cotizaciones))
 _IELinkClickByText($oIE, "Ver histórico")
+if @error Then
+Local	$myArray = ["Error"]
+	$status = "failure"
+else
+Local $myArray = $cmdLine
+Endif
 sleep(2000)
 Local $oTag = _IEGetObjById($oIE,"fecha")
+if @error Then
+Local	$myArray = ["Error"]
+	$status = "failure"
+else
+Local $myArray = $cmdLine
+Endif
 
 _IEFormElementSetValue($oTag, $fecha)
 $oTag = _IEGetObjById($oIE,"buscarHistorico")
@@ -103,7 +115,14 @@ _IEAction($oTag, 'click')
 
 
 $oTable = _IETableGetCollection ($oIE,2)
+if @error Then
+Local	$myArray = ["Error"]
+	$status = "failure"
+else
+	Local $myArray = $cmdLine
+Endif
 $aTableData = _IETableWriteToArray ($oTable, True)
+
 Local $historicoDolar = fomatTableCotizacionesHistoricoToJson($aTableData)
 
 Json_Put($cotizaciones, ".historico_dolar", $historicoDolar)
@@ -126,7 +145,12 @@ else
 Local $myArray = $cmdLine
 Endif
 
-printStdOutTheEye($cotizaciones, $status, True)
+if $status == "failure" Then
+	Local $eArray = ["Error de Navegacion"]
+	printStdOutTheEye($eArray, $status, True)
+Else
+	printStdOutTheEye($cotizaciones, $status, True)
+EndIf
 
 
 ; -------------------------------------- Functions ---------------------------------------------
