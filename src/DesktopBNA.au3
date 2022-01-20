@@ -33,11 +33,11 @@ $parent = _WinAPI_GetProcessName($parent)
 IF $parent = "AutoIt3Wrapper.exe" or $parent = "SciTE.exe" Then
   	ConsoleWrite(@crlf &  "Running from Autoit Editor")
 	#include "env.au3"
-Else    
+Else
 	ConsoleWrite(@crlf &  "Running from TheEye, Console or VSCODE")
 EndIf
 
-Local $repoPath = EnvGet("AUTOIT_REPO_PATH") 
+Local $repoPath = EnvGet("AUTOIT_REPO_PATH")
 ConsoleWrite(@CRLF & "REPO: " & $repoPath)
 
 
@@ -55,6 +55,10 @@ sleep(2000)
 
 
 ;NO VALIDA ENTRADA
+if UBound($cmdLine) < 2 Then
+	printStdOutTheEye("Falta fecha para historico", "failure", false)
+	Exit
+EndIf
 ConsoleWrite($cmdLine[1])
 Local $fechaFull = StringSplit($cmdLine[1], "T")
 Local $aFecha = StringSplit($fechaFull[1], "-")
@@ -158,18 +162,18 @@ EndIf
 
 
 #CS -------------------------------------------------------------------------------------------
-	Function: 
+	Function:
   		printStdOutTheEye ( $errorMessage as String, $status as String, $arrayFormat as Boolean )
-  Description: 
+  Description:
   		Prints standard output formatted for TheEye tasks
   Parameters:
   		$errorMessage: String or Array
       	$status: "success" | "failure"
-      	$arrayFormat: true if $errorMessage is an Array    
+      	$arrayFormat: true if $errorMessage is an Array
 #CE -------------------------------------------------------------------------------------------
 
 Func printStdOutTheEye($errorMessage, $status = "success", $arrayFormat = false)
-	if $arrayFormat Then		
+	if $arrayFormat Then
 		Local $miJson
 		json_put($miJson, ".state", $status)
 		json_put($miJson, ".data", $errorMessage)
@@ -178,26 +182,26 @@ Func printStdOutTheEye($errorMessage, $status = "success", $arrayFormat = false)
 		$errorMessage = StringReplace($errorMessage, "\","/")
 		$line = '{"state":"' & $status & '", "data":["' & $errorMessage & '"]}'
 	EndIF
-	ConsoleWrite(@CRLF & $line & @CRLF)	
+	ConsoleWrite(@CRLF & $line & @CRLF)
 	FileWrite("statusejecucion.log", $line)
 EndFunc
 
 #CS -------------------------------------------------------------------------------------------
-	Function: 
+	Function:
   		fomatTableCotizacionesToJson ($arrayTable)
-  	Description: 
+  	Description:
   		Devuelve JSON con cotizaciones
   	Parameters:
   		$arrayTable matriz con las contizaciones
 #CE -------------------------------------------------------------------------------------------
 
 Func fomatTableCotizacionesToJson($tablaArray)
-	
+
 	Local $jsonCotizaciones[1]
 
 	If IsArray($tablaArray) Then
 		ReDim $jsonCotizaciones[UBound($tablaArray, 1)-1]
-		For $X = 0 To UBound($tablaArray, 1) - 1  
+		For $X = 0 To UBound($tablaArray, 1) - 1
 			Local $cotizacion
 		  	;ConsoleWrite(@CRLF & $tablaArray[$X][0])
 			For $Y = 0 To UBound($tablaArray, 2) - 1
@@ -211,7 +215,7 @@ Func fomatTableCotizacionesToJson($tablaArray)
 				if $Y = 2 AND $X <> 0 Then
 					json_put($jsonCotizaciones[$X-1], ".venta", $tablaArray[$X][$Y])
 				EndIf
-			Next				
+			Next
 		Next
 	Else
 		Return json_encode("")
@@ -219,19 +223,19 @@ Func fomatTableCotizacionesToJson($tablaArray)
 	Return $jsonCotizaciones
 EndFunc
 
-Func fomatTableCotizacionesHistoricoToJson($tablaArray)		
+Func fomatTableCotizacionesHistoricoToJson($tablaArray)
 	If IsArray($tablaArray) Then
 		Local $jsonCotizaciones[UBound($tablaArray, 1)-1]
 		Local $headers[UBound($tablaArray, 2)]
-		For $X = 0 To UBound($tablaArray, 1) - 1  
+		For $X = 0 To UBound($tablaArray, 1) - 1
 		  	;ConsoleWrite(@CRLF & $tablaArray[$X][0])
 			For $Y = 0 To UBound($tablaArray, 2) - 1
 				if $X=0 Then
 					$headers[$Y] = $tablaArray[$X][$Y]
 				Else
-					json_put($jsonCotizaciones[$X-1], "." & $headers[$Y] , $tablaArray[$X][$Y])					
-				EndIf				
-			Next			
+					json_put($jsonCotizaciones[$X-1], "." & $headers[$Y] , $tablaArray[$X][$Y])
+				EndIf
+			Next
 		Next
 	Else
 		Return json_encode("")
