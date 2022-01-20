@@ -59,6 +59,7 @@ if UBound($cmdLine) < 2 Then
 	printStdOutTheEye("Falta fecha para historico", "failure", false)
 	Exit
 EndIf
+; FORMATO AAAA-MM-DD
 ConsoleWrite($cmdLine[1])
 Local $fechaFull = StringSplit($cmdLine[1], "T")
 Local $aFecha = StringSplit($fechaFull[1], "-")
