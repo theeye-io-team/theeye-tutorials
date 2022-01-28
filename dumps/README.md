@@ -17,11 +17,16 @@ database dump. contains files, tasks, workflows, users, etc
 
 ssh 127.0.0.1 -l user
 
-cd /home/user/
+cd /home/user/theeye-of-sauron/
 
 mv mongodump.tgz /home/user/theeye-of-sauron/
 
 tar -xzf mongodump.tgz
+
+# if a previous dump exists
+rm -rf mongodump/theeye-docs
+
+mv theeye-docs mongodump/
 
 # the directory mongodump should be created like this
 
@@ -31,7 +36,7 @@ drwxr-xr-x 2 user user 4096 Nov 19 16:30 theeye-docs/
 
 # import
 
-docker exec -it theeye-mongodb mongorestore "/data/mongodump/"
+docker exec -it theeye-mongodb mongorestore "/data/dump/"
 
 ```
 
